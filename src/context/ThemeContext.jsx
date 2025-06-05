@@ -14,6 +14,9 @@ const ThemeProvider = ({ children }) => {
   const [isDark, setIsDark] = useState(true); // Default to dark theme
 
   useEffect(() => {
+    // Enable smooth scrolling
+    document.documentElement.style.scrollBehavior = 'smooth';
+    
     // Set dark theme as default
     const savedTheme = localStorage.getItem('theme') || 'dark';
     setIsDark(savedTheme === 'dark');

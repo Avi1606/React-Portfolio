@@ -4,25 +4,31 @@
 
 /* Custom CSS variables for theme switching */
 :root {
-  --bg-color: #f9fafb;
-  --text-color: #1f2937;
+  --bg-color: #f8f9fa;
+  --text-color: #1a202c;
   --card-bg: #ffffff;
-  --border-color: #e5e7eb;
-  --shadow-color: rgba(0, 0, 0, 0.1);
+  --border-color: #d1d5db;
+  --shadow-color: rgba(0, 0, 0, 0.08);
+  --accent-color: #4f46e5;
+  --secondary-color: #8b5cf6;
 }
 
-[data-theme="dark"] {
+.dark {
   --bg-color: #0f172a;
   --text-color: #f8fafc;
   --card-bg: #1e293b;
   --border-color: #334155;
   --shadow-color: rgba(0, 0, 0, 0.5);
+  --accent-color: #6366f1;
+  --secondary-color: #a855f7;
 }
 
 body {
   font-family: 'Poppins', sans-serif;
   scroll-behavior: smooth;
   transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
 /* Custom scrollbar */
@@ -44,11 +50,11 @@ body {
 }
 
 /* Dark mode scrollbar */
-[data-theme="dark"] ::-webkit-scrollbar-track {
+.dark ::-webkit-scrollbar-track {
   background: #334155;
 }
 
-[data-theme="dark"] ::-webkit-scrollbar-thumb {
+.dark ::-webkit-scrollbar-thumb {
   background: #4f46e5;
 }
 

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 import { submitContactForm } from '../utils/firebase'
 
@@ -14,6 +14,8 @@ const Contact = () => {
   const [showSuccess, setShowSuccess] = useState(false)
   const [showError, setShowError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
+  const [validationErrors, setValidationErrors] = useState([])
+  const [showValidationPopup, setShowValidationPopup] = useState(false)
 
   const handleInputChange = (e) => {
     setFormData({
@@ -22,8 +24,39 @@ const Contact = () => {
     })
   }
 
+  const validateForm = () => {
+    const errors = []
+
+    if (formData.name.trim() === '') {
+      errors.push('Name is required')
+    }
+
+    if (formData.email.trim() === '') {
+      errors.push('Email is required')
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.push('Email is not valid')
+    }
+
+    if (formData.message.trim() === '') {
+      errors.push('Message is required')
+    } else if (formData.message.trim().length < 10) {
+      errors.push('Message must be at least 10 characters')
+    }
+
+    return errors
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    // Validate the form
+    const errors = validateForm()
+    if (errors.length > 0) {
+      setValidationErrors(errors)
+      setShowValidationPopup(true)
+      return
+    }
+
     setIsSubmitting(true)
 
     try {
@@ -264,6 +297,41 @@ const Contact = () => {
           </motion.div>
         </div>
       )}
+
+      {/* Validation Error Popup */}
+      <AnimatePresence>
+        {showValidationPopup && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => setShowValidationPopup(false)}></div>
+            <motion.div
+              className="bg-white dark:bg-slate-800 rounded-lg p-8 max-w-md mx-auto z-10 shadow-xl"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+            >
+              <div className="text-center">
+                <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                  <i className="bi bi-exclamation-octagon text-red-600 dark:text-red-400 text-xl"></i>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Validation Errors</h3>
+                <ul className="text-sm text-gray-500 dark:text-gray-400 list-disc list-inside mb-4">
+                  {validationErrors.map((error, index) => (
+                    <li key={index}>{error}</li>
+                  ))}
+                </ul>
+                <div className="mt-5">
+                  <button
+                    onClick={() => setShowValidationPopup(false)}
+                    className="gradient-bg text-white px-4 py-2 rounded-full font-medium shadow-lg hover:shadow-xl transition"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

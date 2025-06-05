@@ -7,6 +7,7 @@ import { getAnalytics } from 'firebase/analytics';
 const firebaseConfig = {
   apiKey: "AIzaSyARXQN-Y3vJlU02cAKd5Ft9j8ibRtIhO3c",
   authDomain: "my-portfolio-a2911.firebaseapp.com",
+  databaseURL: "https://my-portfolio-a2911-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "my-portfolio-a2911",
   storageBucket: "my-portfolio-a2911.firebasestorage.app",
   messagingSenderId: "1096502584316",
